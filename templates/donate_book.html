@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Donate a Book{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-xl">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Donate a Book to Book Hive</h2>
+    <p class="text-gray-600 mb-6 text-center">Thank you for your generosity! Please provide details about the book you wish to donate.</p>
+    <form method="POST" action="{{ url_for('donate_book') }}">
+        <div class="mb-4">
+            <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+            <input type="text" id="title" name="title" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="mb-4">
+            <label for="author" class="block text-gray-700 text-sm font-bold mb-2">Author:</label>
+            <input type="text" id="author" name="author" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="mb-4">
+            <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category:</label>
+            <input type="text" id="category" name="category" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="mb-6">
+            <label for="publisher" class="block text-gray-700 text-sm font-bold mb-2">Publisher:</label>
+            <input type="text" id="publisher" name="publisher" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors shadow-md">
+                Submit Donation
+            </button>
+            <a href="{{ url_for('books') }}" class="inline-block align-baseline font-bold text-sm text-green-600 hover:text-green-800">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

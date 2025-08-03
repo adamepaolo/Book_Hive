@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-lg shadow-xl">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Checkout for: {{ book.title }}</h2>
+    <form action="{{ url_for('checkout', book_id=book.id) }}" method="post" class="space-y-4">
+        <div class="form-group">
+            <label for="payment_method" class="form-label">Select Payment Method</label>
+            <select name="payment_method" id="payment_method" class="form-input" required>
+                <option value="Credit Card">Credit Card</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+        </div>
+        <div class="text-2xl font-bold text-gray-900">Total: ${{ "%.2f"|format(book.price) }}</div>
+        <button type="submit" class="btn btn-success">Complete Purchase</button>
+    </form>
+</div>
+{% endblock %}

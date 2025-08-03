@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Hive{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .flash-message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        .flash-message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+        .flash-message.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        .flash-message.info {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #60a5fa;
+        }
+        .flash-message.warning { /* Added warning style */
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+        /* General button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* Equivalent to rounded-md */
+            font-weight: 500; /* Equivalent to font-medium */
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* blue-600 */
+        }
+        .btn-secondary {
+            background-color: #6b7280; /* gray-500 */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563; /* gray-600 */
+        }
+        .btn-success {
+            background-color: #10b981; /* green-500 */
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #059669; /* green-600 */
+        }
+        .btn-danger {
+            background-color: #ef4444; /* red-500 */
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626; /* red-600 */
+        }
+        .btn-warning {
+            background-color: #f59e0b; /* amber-500 */
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #d97706; /* amber-600 */
+        }
+
+        /* Form specific styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .form-input {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #4a5568;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-input:focus {
+            border-color: #a78bfa; /* violet-400 */
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5);
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-blue-600 p-4 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold">Book Hive</a>
+            <div class="space-x-4">
+                <a class="hover:text-blue-200" href="{{ url_for('books') }}">Books</a>
+                <a class="hover:text-blue-200" href="{{ url_for('books_for_sale') }}">Order Books</a> {# NEW LINK #}
+                {% if session.get('is_admin') or session.get('is_librarian') %}
+                    <a class="hover:text-blue-200" href="{{ url_for('manage_books') }}">Manage Books</a>
+                    <a class="hover:text-blue-200" href="{{ url_for('manage_borrow_requests') }}">Manage Borrow Requests</a>
+                {% endif %}
+                {% if session.get('is_admin') %}
+                    <a class="hover:text-blue-200" href="{{ url_for('manage_users') }}">Manage Users</a>
+                {% endif %}
+                {% if session.get('user_id') %}
+                    <a class="hover:text-blue-200" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="hover:text-blue-200" href="{{ url_for('donate_book') }}">Donate Book</a>
+                    <a class="hover:text-blue-200" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="hover:text-blue-200" href="{{ url_for('login') }}">Login</a>
+                    <a class="hover:text-blue-200" href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-4 p-4 flex-grow">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; {{ datetime.now().year }} Book Hive. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

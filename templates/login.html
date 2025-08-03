@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-xl">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Login to Book Hive</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+        <div class="mb-4">
+            <label for="identifier" class="block text-gray-700 text-sm font-bold mb-2">Username or Email:</label>
+            <input type="text" id="identifier" name="identifier" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+            <input type="password" id="password" name="password" required
+                   class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors shadow-md">
+                Login
+            </button>
+            <a href="{{ url_for('register') }}" class="inline-block align-baseline font-bold text-sm text-green-600 hover:text-green-800">
+                Don't have an account? Register
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

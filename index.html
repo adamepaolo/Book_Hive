@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}Welcome to Book Hive{% endblock %}
+
+{% block content %}
+<div class="text-center py-12 bg-white rounded-lg shadow-xl">
+    <h1 class="text-5xl font-extrabold text-gray-800 mb-6">Welcome to Book Hive!</h1>
+    <p class="text-xl text-gray-600 mb-8">Your comprehensive platform to discover, purchase, and read e-books and audiobooks.</p>
+    <div class="flex justify-center space-x-4">
+        <a href="{{ url_for('books') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition-all duration-300">Browse Books</a>
+        {% if not session.get('user_id') %}
+            <a href="{{ url_for('register') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition-all duration-300">Join Us</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
